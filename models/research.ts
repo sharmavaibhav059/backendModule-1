@@ -16,6 +16,10 @@ const Research= sequelize.define(
       autoIncrement: true,
       primaryKey: true,
     },
+    researchType:{
+      type:DataTypes.STRING,
+      allowNull:false
+    },
     journalISBNNo:{
         type:DataTypes.NUMBER,
         allowNull:false,
@@ -24,7 +28,6 @@ const Research= sequelize.define(
     authorsName: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
     },
     researchTitle: {
       type: DataTypes.STRING,

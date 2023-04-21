@@ -15,17 +15,17 @@ export const userRegister=async(req:Request, res:Response):Promise<Response>=>{
     try {
         const err = validationResult(req)
         if(!err.isEmpty()){
-            return res.status(400).json({success:false,errors:err.array()})
+            return res.status(400).json({success:false,errorType:"array",error:err.array()})
         }
         let user = await User.findOne({
             where:{email:req.body.email}
         });
         if(user){
-            return res.status(400).json({success:false,error:"User already exists"})
+            return res.status(400).json({success:false,errorType:"msg",error:"User already exists. Please Login"})
         }
-        if(password!==cpassword){
-            return res.status(400).json({success:false,error:"Password did not match"})
-        }
+        // if(password!==cpassword){
+        //     return res.status(400).json({success:false,errorType:"msg",error:"Password did not match"})
+        // }
         const haspass = bcrypt.hashSync(password,10);
         user = await User.create({
             username,
@@ -40,7 +40,7 @@ export const userRegister=async(req:Request, res:Response):Promise<Response>=>{
     } catch (error) {
         console.log(error);
         
-        return res.status(500).json({success:false,error:"Internal Server Error"})
+        return res.status(500).json({success:false,errorType:"msg",error:"Internal Server Error"})
     }
     
 }
@@ -89,19 +89,16 @@ export const getUser = async (req:Request, res:Response) => {
 
     try {
         let userid = res.locals.user.id
-        const user = await Faculty.findAll({
+        const user = await User.findOne({
             where:{
-                userId:userid,
-            },include:{
-                model:User,
-                as:"user",
-                where:{
-                    id:userid,
-                },
-                attributes:{exclude:["password"]},
-            }
+                id:userid,
+            },
+            attributes:{exclude:["password"]}
         })
-        res.json(user)
+        if(!user){
+            return res.status(401).json({success:false,error:"User not found"});
+        }
+        return res.json({success:true,user})
     } catch (error) {
         console.log(error);
         

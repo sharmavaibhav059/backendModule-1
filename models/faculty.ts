@@ -37,7 +37,7 @@ import User from "./user";
     }
   );
 // Faculty.hasMany(Research)
-Faculty.belongsTo(User,{foreignKey:"userId",foreignKeyConstraint:true,as:"user"});
+Faculty.belongsTo(User,{foreignKey:"userId",foreignKeyConstraint:true,as:"users"});
 
   (async()=>{
     try {

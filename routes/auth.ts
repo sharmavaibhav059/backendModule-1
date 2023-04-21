@@ -6,7 +6,7 @@ const router = Router();
 router.post("/register",[
     body("email","Provide a valid email address").isEmail(),
     body("username","invalid name atleast 3 characters").isLength({min:3}),
-    body("password","password length should be atleast 6 characters and contains numbers, lowercase, uppercase and special characters").isStrongPassword({
+    body("password","Password should be atleast 6 characters long and must contain numbers, lowercase, uppercase and special characters").isStrongPassword({
         minLength:6,
         minUppercase:1,
         minLowercase:1,
